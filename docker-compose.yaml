@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+
+  local-rabbit:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq-books
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: "admin"
+      RABBITMQ_DEFAULT_PASS: "admin"
+      restart: always
+    volumes:
+      - rabbitmq-data-books:/var/lib/rabbitmq
+
+  book_db_2:
+    image: postgres:11-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - database-data-2:/var/lib/postgresql/data/ # persist data even if container shuts down
+    environment:
+      POSTGRES_USER: "bookuser"
+      POSTGRES_PASSWORD: "bookdbpass"
+      POSTGRES_DB: "books_db"
+
+volumes:
+  rabbitmq-data-books:
+  database-data-2:
